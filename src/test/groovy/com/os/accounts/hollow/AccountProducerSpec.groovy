@@ -33,4 +33,15 @@ class AccountProducerSpec extends BaseAccountSpecification {
         1 * incrementalProducer.runCycle()
         0 * _
     }
+
+    def 'delete account'() {
+        when: 'we delete an account'
+        accountProducer.delete(account1)
+
+        then: 'the producer runs a cycle'
+        1 * incrementalProducer.delete(account1)
+        1 * incrementalProducer.runCycle()
+        0 * _
+    }
+
 }

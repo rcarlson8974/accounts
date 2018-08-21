@@ -10,6 +10,7 @@ import groovy.util.logging.Slf4j
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.Body
 import io.micronaut.http.annotation.Controller
+import io.micronaut.http.annotation.Delete
 import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Post
 
@@ -65,4 +66,18 @@ class AccountController {
             return HttpResponse.serverError()
         }
     }
+
+    @Delete("/account/delete")
+    HttpResponse<Account> delete(@Body Account account) {
+        try {
+            accountService.delete(account)
+            return HttpResponse.ok(account)
+        } catch (e) {
+            String errMsg = "error trying to delete account ${account} -> ${e.message ?: e}"
+            log.error(errMsg, e)
+            return HttpResponse.serverError()
+        }
+    }
+
+
 }

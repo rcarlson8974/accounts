@@ -28,4 +28,10 @@ class AccountService {
     void saveAccounts(List<Account> accounts) {
         accountProducer.saveAccounts(accounts)
     }
+
+    void delete(Account account) {
+        accountProducer.delete(account)
+    }
+
+
 }

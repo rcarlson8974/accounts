@@ -100,4 +100,29 @@ class AccountControllerSpec extends BaseAccountSpecification {
         response.status == HttpStatus.INTERNAL_SERVER_ERROR
         !response.body()
     }
+
+    def 'delete account'() {
+        when:
+        def response = accountController.delete(account1)
+
+        then:
+        1 * accountService.delete(account1)
+        0 * _
+        response.status == HttpStatus.OK
+        response.body() == account1
+    }
+
+    def 'delete account handles exception being thrown'() {
+        when:
+        def response = accountController.delete(account1)
+
+        then:
+        1 * accountService.delete(account1) >> {
+            throw new Exception("delete account blew up")
+        }
+        0 * _
+        response.status == HttpStatus.INTERNAL_SERVER_ERROR
+        !response.body()
+    }
+
 }

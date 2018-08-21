@@ -36,4 +36,11 @@ class AccountProducer {
         long nextVersion = incrementalProducer.runCycle()
         log.debug("Saved new accounts with version: ${nextVersion}")
     }
+
+    void delete(Account account) {
+        incrementalProducer.delete(account)
+        long nextVersion = incrementalProducer.runCycle()
+        log.debug("Deleted account with version: ${nextVersion}")
+    }
+
 }
