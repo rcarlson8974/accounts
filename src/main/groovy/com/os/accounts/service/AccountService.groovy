@@ -18,8 +18,7 @@ class AccountService {
     AccountConsumer accountConsumer
 
     List<Account> list() {
-        def allAccounts = accountConsumer.findAllAccounts()
-        return transformToAccount(allAccounts).sort { it.name }
+        return accountConsumer.findAllAccounts()
     }
 
     void save(Account account) {
@@ -28,22 +27,5 @@ class AccountService {
 
     void saveAccounts(List<Account> accounts) {
         accountProducer.saveAccounts(accounts)
-    }
-
-    static List<Account> transformToAccount(Collection<com.os.accounts.hollow.domain.Account> allAccounts) {
-        def accounts = []
-        allAccounts.each {
-            accounts << new Account(
-                    name: it.name.value,
-                    description: it.description.value,
-                    userId: it.userId.value,
-                    passwordHint: it.passwordHint.value,
-                    pinHint: it.pinHint.value,
-                    url: it.url.value,
-                    category: it.category.value,
-                    notes: it.notes.value)
-        }
-
-        return accounts
     }
 }

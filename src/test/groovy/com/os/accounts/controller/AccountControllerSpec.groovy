@@ -18,8 +18,22 @@ class AccountControllerSpec extends BaseAccountSpecification {
 
         then:
         1 * accountService.list() >> { [account1, account2] }
+        0 * _
         response.status == HttpStatus.OK
         response.body() == [account1, account2]
+    }
+
+    def 'list accounts handles exception being thrown'() {
+        when:
+        def response = accountController.list()
+
+        then:
+        1 * accountService.list() >> {
+            throw new Exception("list accounts blew up")
+        }
+        0 * _
+        response.status == HttpStatus.INTERNAL_SERVER_ERROR
+        !response.body()
     }
 
     def 'save account'() {
@@ -28,6 +42,7 @@ class AccountControllerSpec extends BaseAccountSpecification {
 
         then:
         1 * accountService.save(account1)
+        0 * _
         response.status == HttpStatus.CREATED
         response.body() == account1
     }
@@ -51,6 +66,7 @@ class AccountControllerSpec extends BaseAccountSpecification {
 
         then:
         1 * accountService.saveAccounts([account1, account2])
+        0 * _
         response.status == HttpStatus.CREATED
         response.body() == [account1, account2]
     }
