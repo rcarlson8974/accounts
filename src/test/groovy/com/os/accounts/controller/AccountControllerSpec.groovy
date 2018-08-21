@@ -1,7 +1,6 @@
 package com.os.accounts.controller
 
 import com.os.accounts.BaseAccountSpecification
-import com.os.accounts.controller.AccountController
 import com.os.accounts.service.AccountService
 import io.micronaut.http.HttpStatus
 import org.junit.FixMethodOrder
@@ -40,6 +39,29 @@ class AccountControllerSpec extends BaseAccountSpecification {
         then:
         1 * accountService.save(account1) >> {
             throw new Exception("save account blew up")
+        }
+        0 * _
+        response.status == HttpStatus.INTERNAL_SERVER_ERROR
+        !response.body()
+    }
+
+    def 'save accounts'() {
+        when:
+        def response = accountController.saveAccounts([account1, account2])
+
+        then:
+        1 * accountService.saveAccounts([account1, account2])
+        response.status == HttpStatus.CREATED
+        response.body() == [account1, account2]
+    }
+
+    def 'save accounts handles exception being thrown'() {
+        when:
+        def response = accountController.saveAccounts([account1, account2])
+
+        then:
+        1 * accountService.saveAccounts([account1, account2]) >> {
+            throw new Exception("save accounts blew up")
         }
         0 * _
         response.status == HttpStatus.INTERNAL_SERVER_ERROR
