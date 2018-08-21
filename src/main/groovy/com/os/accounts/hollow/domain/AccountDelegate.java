@@ -18,6 +18,8 @@ public interface AccountDelegate extends HollowObjectDelegate {
 
     public int getUrlOrdinal(int ordinal);
 
+    public int getCategoryOrdinal(int ordinal);
+
     public int getNotesOrdinal(int ordinal);
 
     public AccountTypeAPI getTypeAPI();

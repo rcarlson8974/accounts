@@ -19,7 +19,7 @@ class AccountService {
 
     List<Account> list() {
         def allAccounts = accountConsumer.findAllAccounts()
-        return transformToAccount(allAccounts)
+        return transformToAccount(allAccounts).sort { it.name }
     }
 
     void save(Account account) {
@@ -40,6 +40,7 @@ class AccountService {
                     passwordHint: it.passwordHint.value,
                     pinHint: it.pinHint.value,
                     url: it.url.value,
+                    category: it.category.value,
                     notes: it.notes.value)
         }
 

@@ -16,6 +16,7 @@ public class AccountTypeAPI extends HollowObjectTypeAPI {
             "passwordHint",
             "pinHint",
             "url",
+            "category",
             "notes"
         });
         this.delegateLookupImpl = new AccountDelegateLookupImpl(this);
@@ -81,10 +82,20 @@ public class AccountTypeAPI extends HollowObjectTypeAPI {
         return getAPI().getStringTypeAPI();
     }
 
-    public int getNotesOrdinal(int ordinal) {
+    public int getCategoryOrdinal(int ordinal) {
         if(fieldIndex[6] == -1)
-            return missingDataHandler().handleReferencedOrdinal("Account", ordinal, "notes");
+            return missingDataHandler().handleReferencedOrdinal("Account", ordinal, "category");
         return getTypeDataAccess().readOrdinal(ordinal, fieldIndex[6]);
+    }
+
+    public StringTypeAPI getCategoryTypeAPI() {
+        return getAPI().getStringTypeAPI();
+    }
+
+    public int getNotesOrdinal(int ordinal) {
+        if(fieldIndex[7] == -1)
+            return missingDataHandler().handleReferencedOrdinal("Account", ordinal, "notes");
+        return getTypeDataAccess().readOrdinal(ordinal, fieldIndex[7]);
     }
 
     public StringTypeAPI getNotesTypeAPI() {

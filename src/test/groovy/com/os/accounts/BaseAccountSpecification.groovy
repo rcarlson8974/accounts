@@ -1,6 +1,6 @@
 package com.os.accounts
 
-
+import com.os.accounts.domain.Account
 import spock.lang.Shared
 import spock.lang.Specification
 

@@ -37,6 +37,10 @@ public class AccountDelegateLookupImpl extends HollowObjectAbstractDelegate impl
         return typeAPI.getUrlOrdinal(ordinal);
     }
 
+    public int getCategoryOrdinal(int ordinal) {
+        return typeAPI.getCategoryOrdinal(ordinal);
+    }
+
     public int getNotesOrdinal(int ordinal) {
         return typeAPI.getNotesOrdinal(ordinal);
     }

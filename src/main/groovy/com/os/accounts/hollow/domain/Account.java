@@ -54,6 +54,13 @@ public class Account extends HollowObject {
         return  api().getHString(refOrdinal);
     }
 
+    public HString getCategory() {
+        int refOrdinal = delegate().getCategoryOrdinal(ordinal);
+        if(refOrdinal == -1)
+            return null;
+        return  api().getHString(refOrdinal);
+    }
+
     public HString getNotes() {
         int refOrdinal = delegate().getNotesOrdinal(ordinal);
         if(refOrdinal == -1)

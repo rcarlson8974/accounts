@@ -10,5 +10,6 @@ class Account {
     String passwordHint
     String pinHint
     String url
+    String category
     String notes
 }

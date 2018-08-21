@@ -15,6 +15,7 @@ public class AccountDelegateCachedImpl extends HollowObjectAbstractDelegate impl
     private final int passwordHintOrdinal;
     private final int pinHintOrdinal;
     private final int urlOrdinal;
+    private final int categoryOrdinal;
     private final int notesOrdinal;
     private AccountTypeAPI typeAPI;
 
@@ -25,6 +26,7 @@ public class AccountDelegateCachedImpl extends HollowObjectAbstractDelegate impl
         this.passwordHintOrdinal = typeAPI.getPasswordHintOrdinal(ordinal);
         this.pinHintOrdinal = typeAPI.getPinHintOrdinal(ordinal);
         this.urlOrdinal = typeAPI.getUrlOrdinal(ordinal);
+        this.categoryOrdinal = typeAPI.getCategoryOrdinal(ordinal);
         this.notesOrdinal = typeAPI.getNotesOrdinal(ordinal);
         this.typeAPI = typeAPI;
     }
@@ -51,6 +53,10 @@ public class AccountDelegateCachedImpl extends HollowObjectAbstractDelegate impl
 
     public int getUrlOrdinal(int ordinal) {
         return urlOrdinal;
+    }
+
+    public int getCategoryOrdinal(int ordinal) {
+        return categoryOrdinal;
     }
 
     public int getNotesOrdinal(int ordinal) {
