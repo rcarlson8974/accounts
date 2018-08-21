@@ -1,0 +1,19 @@
+micronaut:
+    application:
+        name: accounts
+    server:
+        port: 8080
+        cors:
+            enabled: true
+hystrix:
+  stream:
+    enabled: true
+accounts:
+  api:
+    version: v1
+router:
+    static:
+        resources:
+            enabled: true
+            mapping: /static/**
+            paths: classpath:public,classpath:js

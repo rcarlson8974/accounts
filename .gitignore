@@ -1,0 +1,28 @@
+# OS-specific
+.DS_Store
+
+# IDE junk
+.idea
+*.iml
+*.ipr
+*.iws
+
+# Gradle
+.gradle
+.gradletasknamecache
+gradlew.bat
+
+# Directories
+classes
+build
+logs
+cobertura
+out
+.vagrant
+
+docker/app.jar
+
+accounts.json
+
+git.properties
+*.log
