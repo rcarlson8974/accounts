@@ -31,9 +31,6 @@ class AccountProducer {
 
     void saveAccounts(List<Account> accounts) {
         accounts.each {
-            if(!it.name || it.name.isEmpty())   {
-                it.name = it.description
-            }
             incrementalProducer.addOrModify(it)
         }
         long nextVersion = incrementalProducer.runCycle()

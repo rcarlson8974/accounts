@@ -14,14 +14,14 @@ buildscript {
 version "0.1"
 group "accounts"
 
-apply plugin:"io.spring.dependency-management"
-apply plugin:"com.github.johnrengelman.shadow"
-apply plugin:"application"
-apply plugin:"groovy"
-apply plugin:"java"
-apply plugin:"net.ltgt.apt-eclipse"
-apply plugin:"net.ltgt.apt-idea"
-apply plugin:"net.saliman.cobertura"
+apply plugin: "io.spring.dependency-management"
+apply plugin: "com.github.johnrengelman.shadow"
+apply plugin: "application"
+apply plugin: "groovy"
+apply plugin: "java"
+apply plugin: "net.ltgt.apt-eclipse"
+apply plugin: "net.ltgt.apt-idea"
+apply plugin: "net.saliman.cobertura"
 
 
 repositories {
@@ -60,7 +60,7 @@ dependencies {
     testCompile "org.spockframework:spock-core:1.1-groovy-2.4"
     testCompile "junit:junit:4.12"
     testCompile "io.micronaut:inject-java"
-
+    testCompile group: 'org.objenesis', name: 'objenesis', version: '1.2'
 }
 
 shadowJar {
@@ -70,7 +70,7 @@ shadowJar {
 cobertura {
     coverageReportDir = new File('cobertura/')
     coverageFormats = ['html', 'xml']
-    coverageExcludes = ['.*AccountsApplication.*', 'com.os.accounts.hollow.domain.*']
+    coverageExcludes = ['.*AccountsApplication.*', '.*com.os.accounts.hollow.domain.*', '.*com.os.accounts.hollow.AccountGenerator.*']
     coverageIgnoreTrivial = true
     coverageCheckLineRate = 100
     coverageCheckTotalLineRate = 100

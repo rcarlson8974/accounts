@@ -4,6 +4,7 @@ import com.netflix.hollow.api.codegen.HollowAPIGenerator
 import com.netflix.hollow.core.write.HollowWriteStateEngine
 import com.netflix.hollow.core.write.objectmapper.HollowObjectMapper
 import com.os.accounts.domain.Account
+import com.os.accounts.hollow.AccountGenerator
 import com.os.accounts.service.AccountService
 import groovy.util.logging.Slf4j
 import io.micronaut.http.HttpResponse
@@ -23,30 +24,10 @@ class AccountController {
 
     @Get("/accounts/generate")
     HttpResponse generate() {
-
-        log.debug("Generating hollow API")
-        try {
-
-            HollowWriteStateEngine writeEngine = new HollowWriteStateEngine()
-            HollowObjectMapper mapper = new HollowObjectMapper(writeEngine)
-            mapper.initializeTypeState(Account)
-
-            HollowAPIGenerator generator = new HollowAPIGenerator.Builder()
-                    .withAPIClassname("AccountAPI")
-                    .withDestination("//Users/z001mvb/projects/os/accounts/src/main/groovy/com/os/accounts/hollow/domain")
-                    .withPackageName("com.os.accounts.hollow.domain")
-                    .withDataModel(writeEngine)
-                    .build()
-            generator.generateSourceFiles()
-
-            return HttpResponse
-                    .ok()
-                    .body(api_generated: 'true')
-        } catch (e) {
-            String errMsg = "error trying to generate hollow api -> ${e.message ?: e}"
-            log.error(errMsg, e)
-            return HttpResponse.serverError()
-        }
+        AccountGenerator.generate()
+        return HttpResponse
+                .ok()
+                .body(api_generated: 'true')
     }
 
     @Get("/accounts/list")

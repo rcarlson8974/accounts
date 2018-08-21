@@ -1,6 +1,8 @@
 package com.os.accounts.controller
 
+import com.netflix.hollow.api.producer.HollowProducer
 import com.os.accounts.BaseAccountSpecification
+import com.os.accounts.hollow.AccountGenerator
 import com.os.accounts.service.AccountService
 import io.micronaut.http.HttpStatus
 import org.junit.FixMethodOrder
@@ -11,6 +13,21 @@ class AccountControllerSpec extends BaseAccountSpecification {
 
     AccountService accountService = Mock()
     AccountController accountController = new AccountController(accountService: accountService)
+
+    void setup() {
+        GroovyMock(AccountGenerator, global: true)
+    }
+
+    def 'generates new hollow domain objects'() {
+        when:
+        def response = accountController.generate()
+
+        then:
+        1 * AccountGenerator.generate()
+        0 * _
+        response.status == HttpStatus.OK
+        response.body() == [api_generated: 'true']
+    }
 
     def 'list accounts'() {
         when:
