@@ -12,6 +12,13 @@ public class Account extends HollowObject {
         super(delegate, ordinal);
     }
 
+    public HString getVersion() {
+        int refOrdinal = delegate().getVersionOrdinal(ordinal);
+        if(refOrdinal == -1)
+            return null;
+        return  api().getHString(refOrdinal);
+    }
+
     public HString getName() {
         int refOrdinal = delegate().getNameOrdinal(ordinal);
         if(refOrdinal == -1)

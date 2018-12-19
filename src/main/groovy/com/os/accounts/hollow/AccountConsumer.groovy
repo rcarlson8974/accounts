@@ -8,12 +8,13 @@ import com.os.accounts.hollow.domain.AccountAPI
 import groovy.util.logging.Slf4j
 
 import javax.inject.Singleton
+import java.nio.file.Path
 
 @Singleton
 @Slf4j
 class AccountConsumer {
 
-    File localPublishDir = new File("/tmp/hollow")
+    Path localPublishDir = new File("/tmp/hollow").toPath()
 
     HollowFilesystemBlobRetriever blobRetriever = new HollowFilesystemBlobRetriever(localPublishDir)
     HollowFilesystemAnnouncementWatcher announcementWatcher = new HollowFilesystemAnnouncementWatcher(localPublishDir)
@@ -34,14 +35,15 @@ class AccountConsumer {
         def accounts = []
         allAccounts.each {
             accounts << new Account(
+                    version: it.version.value,
                     name: it.name.value,
                     description: it.description.value,
-                    userId: it.userId.value,
-                    passwordHint: it.passwordHint.value,
-                    pinHint: it.pinHint.value,
-                    url: it.url.value,
-                    category: it.category.value,
-                    notes: it.notes.value)
+                    userId: it.userId?.value,
+                    passwordHint: it.passwordHint?.value,
+                    pinHint: it.pinHint?.value,
+                    url: it.url?.value,
+                    category: it.category?.value,
+                    notes: it.notes?.value)
         }
 
         return accounts

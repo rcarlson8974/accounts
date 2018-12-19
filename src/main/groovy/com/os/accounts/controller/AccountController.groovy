@@ -1,37 +1,24 @@
 package com.os.accounts.controller
 
-import com.netflix.hollow.api.codegen.HollowAPIGenerator
-import com.netflix.hollow.core.write.HollowWriteStateEngine
-import com.netflix.hollow.core.write.objectmapper.HollowObjectMapper
+
 import com.os.accounts.domain.Account
-import com.os.accounts.hollow.AccountGenerator
 import com.os.accounts.service.AccountService
 import groovy.util.logging.Slf4j
 import io.micronaut.http.HttpResponse
-import io.micronaut.http.annotation.Body
-import io.micronaut.http.annotation.Controller
-import io.micronaut.http.annotation.Delete
-import io.micronaut.http.annotation.Get
-import io.micronaut.http.annotation.Post
+import io.micronaut.http.annotation.*
+import io.micronaut.validation.Validated
 
 import javax.inject.Inject
 
-@Controller('/${accounts.api.version}')
+@Controller('/account/${micronaut.application.api.version}')
+@Validated
 @Slf4j
 class AccountController {
 
     @Inject
     AccountService accountService
 
-    @Get("/accounts/generate")
-    HttpResponse generate() {
-        AccountGenerator.generate()
-        return HttpResponse
-                .ok()
-                .body(api_generated: 'true')
-    }
-
-    @Get("/accounts/list")
+    @Get('/list')
     HttpResponse<List<Account>> list() {
         try {
             def accounts = accountService.list()
@@ -43,7 +30,7 @@ class AccountController {
         }
     }
 
-    @Post("/account/save")
+    @Post("/save")
     HttpResponse<Account> save(@Body Account account) {
         try {
             accountService.save(account)
@@ -55,7 +42,7 @@ class AccountController {
         }
     }
 
-    @Post("/accounts/save")
+    @Post("/save-all")
     HttpResponse<List<Account>> saveAccounts(@Body List<Account> accounts) {
         try {
             accountService.saveAccounts(accounts)
@@ -67,7 +54,7 @@ class AccountController {
         }
     }
 
-    @Delete("/account/delete")
+    @Delete("/delete")
     HttpResponse<Account> delete(@Body Account account) {
         try {
             accountService.delete(account)
@@ -78,6 +65,4 @@ class AccountController {
             return HttpResponse.serverError()
         }
     }
-
-
 }

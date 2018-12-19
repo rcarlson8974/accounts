@@ -18,17 +18,6 @@ class AccountControllerSpec extends BaseAccountSpecification {
         GroovyMock(AccountGenerator, global: true)
     }
 
-    def 'generates new hollow domain objects'() {
-        when:
-        def response = accountController.generate()
-
-        then:
-        1 * AccountGenerator.generate()
-        0 * _
-        response.status == HttpStatus.OK
-        response.body() == [api_generated: 'true']
-    }
-
     def 'list accounts'() {
         when:
         def response = accountController.list()

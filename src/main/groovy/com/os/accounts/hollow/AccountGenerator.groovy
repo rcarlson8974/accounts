@@ -12,15 +12,14 @@ class AccountGenerator {
         HollowObjectMapper mapper = new HollowObjectMapper(writeEngine)
         mapper.initializeTypeState(Account)
 
-        def baseDir = System.getProperty("user.dir")
-
         HollowAPIGenerator generator = new HollowAPIGenerator.Builder()
                 .withAPIClassname("AccountAPI")
-                .withDestination("//${baseDir}/src/main/groovy/com/os/accounts/hollow/domain")
+                .withDestination("${new File(System.getProperty("user.dir"))}/src/main/groovy/com/os/accounts/hollow/domain")
                 .withPackageName("com.os.accounts.hollow.domain")
                 .withDataModel(writeEngine)
                 .build()
         generator.generateSourceFiles()
 
     }
+
 }

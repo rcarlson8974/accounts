@@ -1,0 +1,4 @@
+apiVersion: v1
+description: OS Accounts API
+name: osaccounts-api
+version: DRONE_BUILD_VERSION

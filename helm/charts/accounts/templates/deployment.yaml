@@ -1,0 +1,62 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: "{{ .Chart.Name }}-deployment"
+  namespace: "os-{{ .Values.env }}"
+  labels:
+    app: {{ .Chart.Name }}
+    chart: "{{ .Chart.Name }}-{{ .Values.deployment.image.tag }}"
+    heritage: {{ .Release.Service | quote }}
+    release: {{ .Release.Name | quote }}
+    version: {{ .Values.deployment.image.tag | quote }}
+spec:
+  replicas: {{ .Values.deployment.replicaCount }}
+  minReadySeconds: {{ .Values.deployment.minReadySeconds }}
+  revisionHistoryLimit: {{ .Values.deployment.revisionHistoryLimit }}
+  strategy:
+    rollingUpdate:
+      maxSurge: {{ .Values.deployment.maxSurge }}
+      maxUnavailable: {{ .Values.deployment.maxUnavailable }}
+    type: {{ .Values.deployment.type }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}
+      annotations:
+        checksum/config: {{ include (print $.Chart.Name "/templates/configmap.yaml") . | sha256sum }}
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.deployment.image.repository }}/{{ .Chart.Name }}:{{ .Values.deployment.image.tag }}"
+        imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
+        env:
+          - name: JAVA_OPTS
+            value: "{{ .Values.deployment.javaOpts }}"
+        ports:
+        - containerPort: {{ .Values.service.internalPort }}
+        {{ if .Values.deployment.liveness.enabled }}
+        livenessProbe:
+          httpGet:
+            path: {{ .Values.deployment.liveness.path }}
+            port: {{ .Values.service.internalPort }}
+          initialDelaySeconds: {{ .Values.deployment.liveness.initialDelaySeconds }}
+          timeoutSeconds: {{ .Values.deployment.liveness.timeoutSeconds }}
+        {{ end }}
+        {{ if .Values.deployment.readiness.enabled }}
+        readinessProbe:
+          httpGet:
+            path: {{ .Values.deployment.readiness.path }}
+            port: {{ .Values.service.internalPort }}
+          initialDelaySeconds: {{ .Values.deployment.readiness.initialDelaySeconds }}
+          timeoutSeconds: {{ .Values.deployment.readiness.timeoutSeconds }}
+        {{ end }}
+        volumeMounts:
+        - name: "{{ .Chart.Name }}-config-volume"
+          mountPath: /config
+      volumes:
+      - name: "{{ .Chart.Name }}-config-volume"
+        configMap:
+          name: "{{ .Chart.Name }}-configmap"
+          items:
+          - key: "{{ .Chart.Name }}-configmap-key"
+            path: application.yml

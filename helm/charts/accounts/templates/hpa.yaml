@@ -1,0 +1,19 @@
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: "{{ .Chart.Name }}-deployment-hpa"
+  namespace: "os-{{ .Values.env }}"
+  labels:
+    app: {{ .Chart.Name }}
+    chart: "{{ .Chart.Name }}-{{ .Values.deployment.image.tag }}"
+    heritage: {{ .Release.Service | quote }}
+    release: {{ .Release.Name | quote }}
+    version: {{ .Values.deployment.image.tag | quote }}
+spec:
+  minReplicas: {{ .Values.deployment.minReplicas }}
+  maxReplicas: {{ .Values.deployment.maxReplicas }}
+  targetCPUUtilizationPercentage: {{ .Values.deployment.targetCPUUtilizationPercentage }}
+  scaleTargetRef:
+    apiVersion: extensions/v1beta1
+    kind: Deployment
+    name: "{{ .Chart.Name }}-deployment"

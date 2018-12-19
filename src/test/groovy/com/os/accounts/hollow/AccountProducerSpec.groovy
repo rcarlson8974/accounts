@@ -43,5 +43,4 @@ class AccountProducerSpec extends BaseAccountSpecification {
         1 * incrementalProducer.runCycle()
         0 * _
     }
-
 }

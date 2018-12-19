@@ -1,7 +1,6 @@
 package com.os.accounts
 
 import com.os.accounts.domain.Account
-import com.os.accounts.hollow.domain.HString
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -9,6 +8,7 @@ class BaseAccountSpecification extends Specification {
 
     @Shared
     def account1 = new Account(
+            version: 'version1',
             name: 'account1',
             description: 'description1',
             userId: 'userId1',
@@ -21,6 +21,7 @@ class BaseAccountSpecification extends Specification {
 
     @Shared
     def account2 = new Account(
+            version: 'version2',
             name: 'account2',
             description: 'description2',
             userId: 'userId2',
@@ -30,8 +31,5 @@ class BaseAccountSpecification extends Specification {
             category: 'category2',
             notes: 'notes2'
     )
-
-    @Shared
-    HString mockString = Mock()
 
 }

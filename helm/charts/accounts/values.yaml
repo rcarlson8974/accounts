@@ -1,0 +1,48 @@
+deployment:
+  javaOpts: '-Xms1g -Xmx1g -Duser.timezone=America/Chicago'
+  image:
+    repository: gcr.io/os-prod-218112
+    tag: latest
+    pullPolicy: Always
+  replicaCount: 1
+  minReplicas: 1
+  maxReplicas: 1
+  targetCPUUtilizationPercentage: 80
+  maxSurge: 1
+  maxUnavailable: 0
+  minReadySeconds: 30
+  revisionHistoryLimit: 0
+  type: RollingUpdate
+  liveness:
+    enabled: true
+    path: /health
+    initialDelaySeconds: 90
+    timeoutSeconds: 2
+  readiness:
+    enabled: true
+    path: /health
+    initialDelaySeconds: 90
+    timeoutSeconds: 2
+  google:
+    credentials:
+      secretName: true
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+    requests:
+      cpu: 1000m
+      memory: 1Gi
+service:
+  type: LoadBalancer
+#  type: NodePort
+  loadBalancerIP: 35.224.29.208
+  externalPort: 80
+  internalPort: 8080
+configmap:
+  properties:
+    hollow:
+      bucket: 'os-account-data'
+      domain: 'hollow-dev/accounts'
+      namespace: 'v1'
+      applicationName: 'accounts-1.0'

@@ -1,0 +1,15 @@
+env: stage
+deployment:
+  replicaCount: 1
+  minReplicas: 1
+  maxReplicas: 2
+configmap:
+  properties:
+    hollow:
+      bucket: 'os-account-data'
+      domain: 'hollow-prod/accounts'
+      namespace: 'v1'
+      applicationName: 'accounts-1.0'
+
+ingress:
+  host: us-central1-prod.gcp.cloud.os.internal

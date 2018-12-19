@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: "{{ .Chart.Name }}-ingress"
+  namespace: "os-{{ .Values.env }}"
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: os-apps-ip
+  labels:
+    name: "{{ .Chart.Name }}-ingress"
+    chart: "{{ .Chart.Name }}-{{ .Values.deployment.image.tag }}"
+    app: {{ .Chart.Name }}
+    version: {{ .Values.deployment.image.tag | quote }}
+spec:
+  rules:
+  - host: "os-{{ .Chart.Name }}-{{ .Values.env }}.{{ .Values.ingress.host }}"
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: "{{ .Chart.Name }}-service"
+          servicePort: {{ .Values.service.externalPort }}

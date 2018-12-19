@@ -10,6 +10,7 @@ public class AccountTypeAPI extends HollowObjectTypeAPI {
 
     public AccountTypeAPI(AccountAPI api, HollowObjectTypeDataAccess typeDataAccess) {
         super(api, typeDataAccess, new String[] {
+            "version",
             "name",
             "description",
             "userId",
@@ -22,10 +23,20 @@ public class AccountTypeAPI extends HollowObjectTypeAPI {
         this.delegateLookupImpl = new AccountDelegateLookupImpl(this);
     }
 
-    public int getNameOrdinal(int ordinal) {
+    public int getVersionOrdinal(int ordinal) {
         if(fieldIndex[0] == -1)
-            return missingDataHandler().handleReferencedOrdinal("Account", ordinal, "name");
+            return missingDataHandler().handleReferencedOrdinal("Account", ordinal, "version");
         return getTypeDataAccess().readOrdinal(ordinal, fieldIndex[0]);
+    }
+
+    public StringTypeAPI getVersionTypeAPI() {
+        return getAPI().getStringTypeAPI();
+    }
+
+    public int getNameOrdinal(int ordinal) {
+        if(fieldIndex[1] == -1)
+            return missingDataHandler().handleReferencedOrdinal("Account", ordinal, "name");
+        return getTypeDataAccess().readOrdinal(ordinal, fieldIndex[1]);
     }
 
     public StringTypeAPI getNameTypeAPI() {
@@ -33,9 +44,9 @@ public class AccountTypeAPI extends HollowObjectTypeAPI {
     }
 
     public int getDescriptionOrdinal(int ordinal) {
-        if(fieldIndex[1] == -1)
+        if(fieldIndex[2] == -1)
             return missingDataHandler().handleReferencedOrdinal("Account", ordinal, "description");
-        return getTypeDataAccess().readOrdinal(ordinal, fieldIndex[1]);
+        return getTypeDataAccess().readOrdinal(ordinal, fieldIndex[2]);
     }
 
     public StringTypeAPI getDescriptionTypeAPI() {
@@ -43,9 +54,9 @@ public class AccountTypeAPI extends HollowObjectTypeAPI {
     }
 
     public int getUserIdOrdinal(int ordinal) {
-        if(fieldIndex[2] == -1)
+        if(fieldIndex[3] == -1)
             return missingDataHandler().handleReferencedOrdinal("Account", ordinal, "userId");
-        return getTypeDataAccess().readOrdinal(ordinal, fieldIndex[2]);
+        return getTypeDataAccess().readOrdinal(ordinal, fieldIndex[3]);
     }
 
     public StringTypeAPI getUserIdTypeAPI() {
@@ -53,9 +64,9 @@ public class AccountTypeAPI extends HollowObjectTypeAPI {
     }
 
     public int getPasswordHintOrdinal(int ordinal) {
-        if(fieldIndex[3] == -1)
+        if(fieldIndex[4] == -1)
             return missingDataHandler().handleReferencedOrdinal("Account", ordinal, "passwordHint");
-        return getTypeDataAccess().readOrdinal(ordinal, fieldIndex[3]);
+        return getTypeDataAccess().readOrdinal(ordinal, fieldIndex[4]);
     }
 
     public StringTypeAPI getPasswordHintTypeAPI() {
@@ -63,9 +74,9 @@ public class AccountTypeAPI extends HollowObjectTypeAPI {
     }
 
     public int getPinHintOrdinal(int ordinal) {
-        if(fieldIndex[4] == -1)
+        if(fieldIndex[5] == -1)
             return missingDataHandler().handleReferencedOrdinal("Account", ordinal, "pinHint");
-        return getTypeDataAccess().readOrdinal(ordinal, fieldIndex[4]);
+        return getTypeDataAccess().readOrdinal(ordinal, fieldIndex[5]);
     }
 
     public StringTypeAPI getPinHintTypeAPI() {
@@ -73,9 +84,9 @@ public class AccountTypeAPI extends HollowObjectTypeAPI {
     }
 
     public int getUrlOrdinal(int ordinal) {
-        if(fieldIndex[5] == -1)
+        if(fieldIndex[6] == -1)
             return missingDataHandler().handleReferencedOrdinal("Account", ordinal, "url");
-        return getTypeDataAccess().readOrdinal(ordinal, fieldIndex[5]);
+        return getTypeDataAccess().readOrdinal(ordinal, fieldIndex[6]);
     }
 
     public StringTypeAPI getUrlTypeAPI() {
@@ -83,9 +94,9 @@ public class AccountTypeAPI extends HollowObjectTypeAPI {
     }
 
     public int getCategoryOrdinal(int ordinal) {
-        if(fieldIndex[6] == -1)
+        if(fieldIndex[7] == -1)
             return missingDataHandler().handleReferencedOrdinal("Account", ordinal, "category");
-        return getTypeDataAccess().readOrdinal(ordinal, fieldIndex[6]);
+        return getTypeDataAccess().readOrdinal(ordinal, fieldIndex[7]);
     }
 
     public StringTypeAPI getCategoryTypeAPI() {
@@ -93,9 +104,9 @@ public class AccountTypeAPI extends HollowObjectTypeAPI {
     }
 
     public int getNotesOrdinal(int ordinal) {
-        if(fieldIndex[7] == -1)
+        if(fieldIndex[8] == -1)
             return missingDataHandler().handleReferencedOrdinal("Account", ordinal, "notes");
-        return getTypeDataAccess().readOrdinal(ordinal, fieldIndex[7]);
+        return getTypeDataAccess().readOrdinal(ordinal, fieldIndex[8]);
     }
 
     public StringTypeAPI getNotesTypeAPI() {

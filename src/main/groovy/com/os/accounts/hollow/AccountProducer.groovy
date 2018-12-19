@@ -8,12 +8,13 @@ import com.os.accounts.domain.Account
 import groovy.util.logging.Slf4j
 
 import javax.inject.Singleton
+import java.nio.file.Path
 
 @Singleton
 @Slf4j
 class AccountProducer {
 
-    File localPublishDir = new File("/tmp/hollow")
+    Path localPublishDir = new File("/tmp/hollow").toPath()
 
     HollowFilesystemPublisher publisher = new HollowFilesystemPublisher(localPublishDir)
     HollowFilesystemAnnouncer announcer = new HollowFilesystemAnnouncer(localPublishDir)

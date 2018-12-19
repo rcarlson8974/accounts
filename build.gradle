@@ -1,70 +1,85 @@
-buildscript {
-    repositories {
-        mavenCentral()
-        maven { url "https://plugins.gradle.org/m2/" }
-    }
-    dependencies {
-        classpath "com.github.jengelman.gradle.plugins:shadow:2.0.4"
-        classpath "io.spring.gradle:dependency-management-plugin:1.0.5.RELEASE"
-        classpath "net.ltgt.gradle:gradle-apt-plugin:0.15"
-        classpath "net.saliman:gradle-cobertura-plugin:2.5.4"
-    }
+plugins {
+    id "com.github.ben-manes.versions" version "0.20.0"
+    id "com.github.johnrengelman.shadow" version "4.0.3"
+    id "com.liferay.app.docker" version "1.0.9"
+    id "io.spring.dependency-management" version "1.0.6.RELEASE"
+    id "net.saliman.cobertura" version "2.5.4"
 }
 
-version "0.1"
+apply plugin:"application"
+apply plugin:"groovy"
+
+version "0.0.1-SNAPSHOT"
 group "accounts"
 
-apply plugin: "io.spring.dependency-management"
-apply plugin: "com.github.johnrengelman.shadow"
-apply plugin: "application"
-apply plugin: "groovy"
-apply plugin: "java"
-apply plugin: "net.ltgt.apt-eclipse"
-apply plugin: "net.ltgt.apt-idea"
-apply plugin: "net.saliman.cobertura"
-
+//--------------------------------------------------------------------------
+// Use this task to see dependency updates available:
+//--------------------------------------------------------------------------
+// ./gradlew dependencyUpdates -Drevision=release
+//--------------------------------------------------------------------------
 
 repositories {
     mavenLocal()
     mavenCentral()
+    maven { url "https://jcenter.bintray.com" }
 }
 
 dependencyManagement {
     imports {
-        mavenBom 'io.micronaut:bom:1.0.0-SNAPSHOT'
+        mavenBom 'io.micronaut:micronaut-bom:1.0.2'
     }
 }
 
 dependencies {
-    annotationProcessor "io.micronaut:inject-java"
 
-    compile group: 'cglib', name: 'cglib-nodep', version: '3.2.7'
+    compile "cglib:cglib-nodep:3.2.10"
+    compile "com.netflix.hollow:hollow:${hollowVersion}"
+    compile "com.netflix.hollow:hollow-diff-ui:${hollowVersion}"
+    compile "com.netflix.hollow:hollow-explorer-ui:${hollowVersion}"
+    compile "io.swagger.core.v3:swagger-annotations:2.0.6"
+    compile "io.micronaut:micronaut-http-client"
+    compile "io.micronaut:micronaut-http-server-netty"
+    compile "io.micronaut:micronaut-management"
+    compile "io.micronaut:micronaut-runtime-groovy"
+    compile "io.micronaut:micronaut-validation"
+    compile "org.codehaus.groovy:groovy-all:2.5.2"
+    compile "org.slf4j:slf4j-api:1.8.0-beta2"
+    compileOnly "io.micronaut.configuration:micronaut-openapi"
+    compileOnly "io.micronaut:micronaut-inject-groovy"
+    runtime "ch.qos.logback:logback-classic:1.3.0-alpha4"
+    testCompile "com.netflix.hollow:hollow-test:${hollowVersion}"
+    testCompile "io.micronaut:micronaut-inject-groovy"
+    testCompile "io.micronaut:micronaut-inject-java"
+    testCompile "junit:junit:4.13-beta-1"
+    testCompile "org.hamcrest:hamcrest-all:1.3"
+    testCompile "org.objenesis:objenesis:3.0.1"
+    testCompile("org.spockframework:spock-core:1.2-RC3-groovy-2.5") {
+        exclude group: "org.codehaus.groovy", module: "groovy-all"
+    }
+}
 
-    compile 'com.netflix.hollow:hollow:3.0.1'
+task generateHollowDomain(type: JavaExec) {
+    main = 'com.tgt.gxc.rfid.hollow.HollowDomainGenerator'
+    classpath = sourceSets.main.runtimeClasspath
+}
 
-    compile "io.micronaut.configuration:netflix-hystrix"
-    compile "io.micronaut:http-client"
-    compile "io.micronaut:http-server-netty"
-    compile "io.micronaut:runtime-groovy"
-    compile "io.micronaut:inject"
-    compile "io.micronaut:runtime"
-    compile "org.webjars:bootstrap:4.1.0"
-    compile "org.webjars:jquery:3.3.1-1"
-
-    compileOnly "io.micronaut:inject-groovy"
-    compileOnly "io.micronaut:inject-java"
-
-    runtime "ch.qos.logback:logback-classic:1.2.3"
-
-    testCompile "io.micronaut:inject-groovy"
-    testCompile "org.spockframework:spock-core:1.1-groovy-2.4"
-    testCompile "junit:junit:4.12"
-    testCompile "io.micronaut:inject-java"
-    testCompile group: 'org.objenesis', name: 'objenesis', version: '1.2'
+task copyJar(type: Copy) {
+    dependsOn build
+    from "build/libs/${project.name}-${project.version}-all.jar"
+    into 'docker'
+    rename { String fileName ->
+        fileName.replace("-${project.version}-all", "").replace("${project.name}", "app")
+    }
 }
 
 shadowJar {
     mergeServiceFiles()
+}
+
+processResources {
+    filesMatching("**/application.yml") {
+        expand(project.properties)
+    }
 }
 
 cobertura {
@@ -77,7 +92,22 @@ cobertura {
     coverageCheckHaltOnFailure = true
 }
 
+prepareAppDockerImageInputDir {
+    finalizedBy copyJar
+}
+
+build {
+    finalizedBy copyJar
+}
+
+buildAppDockerImage {
+    inputDir = new File('docker/')
+    tag = "gcr.io/os-prod-218112/osaccounts-api:latest"
+}
+
+run.jvmArgs('-noverify', '-XX:TieredStopAtLevel=1')
 
 mainClassName = "com.os.accounts.AccountsApplication"
-compileJava.options.compilerArgs += '-parameters'
-compileTestJava.options.compilerArgs += '-parameters'
+tasks.withType(GroovyCompile) {
+    groovyOptions.forkOptions.jvmArgs.add('-Dgroovy.parameters=true')
+}
