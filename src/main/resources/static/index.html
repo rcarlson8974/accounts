@@ -14,14 +14,11 @@
 
 <div id="accountsContainer" class="container">
     <h1>OS Accounts</h1>
-    <div style="padding: 10px 0 20px 0;">
-        <button type="button" class="btn btn-primary" id="oosCheckBtn">Inventory Compliance Check</button>
-    </div>
     <div class="table-hover table-bordered table-striped table-responsive-sm">
         <table id="accountsTable"
                data-toolbar="#toolbar"
                data-icon-size="xs"
-               data-icons-prefix="fa"
+               data-icons-prefix="glyphicon"
                data-icons="icons"
                data-search="true"
                data-show-header="true"
@@ -38,44 +35,125 @@
                data-show-footer="true">
             <thead>
             <tr>
-
-                <th data-field="id" data-checkbox="true"></th>
                 <th scope="col" data-field="name" data-sortable="true">Name</th>
-                <th scope="col" data-field="description" data-sortable="true">Description</th>
+                <th scope="col" data-field="description" data-sortable="true" data-visible="false">Description</th>
                 <th scope="col" data-field="userId" data-sortable="true">User ID</th>
                 <th scope="col" data-field="passwordHint" data-sortable="true">Password Hint</th>
                 <th scope="col" data-field="pinHint" data-sortable="true">PIN Hint</th>
-                <th scope="col" data-field="url" data-sortable="true">URL</th>
+                <th scope="col" data-field="url" data-sortable="true" data-visible="false">URL</th>
                 <th scope="col" data-field="category" data-sortable="true">Category</th>
-                <th scope="col" data-field="notes" data-sortable="true">Notes</th>
-                <th scope="col" data-field=""></th>
-
-
-                <!--<th scope="col" data-field="epc" data-sortable="true" data-visible="false">EPC</th>-->
-                <!--<th scope="col" data-field="upc" data-sortable="true" data-visible="false">UPC</th>-->
-                <!--<th scope="col" data-field="lastReadTimestamp" data-sortable="true" data-visible="false">Last Read TS-->
-                <!--</th>-->
-                <!--<th scope="col" data-field="lastReadDate" data-sortable="true" data-visible="true">Last Read Date</th>-->
-                <!--<th scope="col" data-field="firstSeenTimestamp" data-sortable="true" data-visible="false">First Read-->
-                    <!--TS-->
-                <!--</th>-->
-                <!--<th scope="col" data-field="firstSeenDate" data-sortable="true" data-visible="true">First Read Date-->
-                <!--</th>-->
-                <!--<th scope="col" data-field="merchClass" data-sortable="true" data-visible="false">Merch Class</th>-->
-                <!--<th scope="col" data-field="merchDivision" data-sortable="true" data-visible="false">Merch Div</th>-->
-                <!--<th scope="col" data-field="deptName" data-sortable="false" data-visible="false">Dept Name</th>-->
-                <!--<th scope="col" data-field="dpci" data-sortable="true">DPCI</th>-->
-                <!--<th scope="col" data-field="tcin" data-sortable="true" data-visible="false">TCIN</th>-->
-                <!--<th scope="col" data-field="generalDescription" data-sortable="true">Desc</th>-->
-                <!--<th scope="col" data-field="maxStoreCount" data-sortable="true">Max Shelf <br>Count</th>-->
-                <!--<th scope="col" data-field="currentStoreCount" data-sortable="true">Current Shelf <br>Count</th>-->
-                <!--<th scope="col" data-field="currentStoreCount" data-sortable="true"-->
-                    <!--data-formatter="calculateInStockPercent"-->
-                    <!--data-cell-style="styleInStockCell">In Stock<br>%-->
-                <!--</th>-->
+                <th scope="col" data-field="notes" data-sortable="true" data-visible="false">Notes</th>
+                <th scope="col" data-field="" data-formatter="addButtons">Edit/Delete</th>
             </tr>
             </thead>
         </table>
+    </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Edit Account</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group row" style="display: none;">
+                        <label for="id" class="col-sm-2 col-form-label col-form-label-sm">ID</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control form-control-sm" id="id"
+                                   placeholder="">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="name" class="col-sm-2 col-form-label col-form-label-sm">Name</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control form-control-sm" id="name"
+                                   placeholder="">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="desc" class="col-sm-2 col-form-label col-form-label-sm">Desc</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control form-control-sm" id="desc"
+                                   placeholder="">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="userId" class="col-sm-2 col-form-label col-form-label-sm">User ID</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control form-control-sm" id="userId"
+                                   placeholder="">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="pwdHint" class="col-sm-2 col-form-label col-form-label-sm">Password Hint</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control form-control-sm" id="pwdHint"
+                                   placeholder="">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="pinHint" class="col-sm-2 col-form-label col-form-label-sm">Pin Hint</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control form-control-sm" id="pinHint"
+                                   placeholder="">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="url" class="col-sm-2 col-form-label col-form-label-sm">URL</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control form-control-sm" id="url"
+                                   placeholder="">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="category" class="col-sm-2 col-form-label col-form-label-sm">Category</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control form-control-sm" id="category"
+                                   placeholder="">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="notes" class="col-sm-2 col-form-label col-form-label-sm">Notes</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control form-control-sm" id="notes"
+                                   placeholder="">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="cancelEditButton" type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button id="saveButton" type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Delete Account</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you wish to delete the following account?
+                <div id="version"></div>
+            </div>
+            <div class="modal-footer">
+                <button id="cancelDeleteButton" type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button id="confirmDeleteButton" type="button" class="btn btn-danger btn-ok">Confirm</button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -91,45 +169,156 @@
 
 <script>
 
-    window.icons = {
-        refresh: 'fa-refresh',
-        toggleOn: 'fa-toggle-on',
-        toggleOff: 'fa-toggle-on',
-        columns: 'fa-th-list'
-    };
+    // window.icons = {
+    //     refresh: 'fa-refresh',
+    //     toggleOn: 'fa-toggle-on',
+    //     toggleOff: 'fa-toggle-on',
+    //     columns: 'fa-th-list'
+    // };
+
+    function addButtons(value, row, index) {
+        return "<button type=\"button\" class=\"editButton btn btn-primary btn-sm\" data-id=" + row.version + " data-toggle=\"modal\" data-target=\"#editModal\">Edit</button> " +
+            "<button type=\"button\" class=\"deleteButton btn btn-danger btn-sm\" data-id=" + row.version + " data-toggle=\"modal\" data-target=\"#deleteModal\">Delete</button>";
+    }
+
+    $("#saveButton").click(function () {
+        var version = $("#editModal .modal-body #id").val();
+        var name = $("#editModal .modal-body #name").val();
+        var desc = $("#editModal .modal-body #desc").val();
+        var userId = $("#editModal .modal-body #userId").val();
+        var pwdHint = $("#editModal .modal-body #pwdHint").val();
+        var pinHint = $("#editModal .modal-body #pinHint").val();
+        var url = $("#editModal .modal-body #url").val();
+        var category = $("#editModal .modal-body #category").val();
+        var notes = $("#editModal .modal-body #notes").val();
+
+        var account = {
+            version: version,
+            name: name,
+            description: desc,
+            userId: userId,
+            passwordHint: pwdHint,
+            pinHint: pinHint,
+            url: url,
+            category: category,
+            notes: notes
+        };
+
+        $.ajax({
+            type: "POST",
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8",
+            // url: "http://35.224.29.208/account/v1/list",
+            url: "http://localhost:8080/account/v1/save",
+            data: JSON.stringify(account),
+            success: function (account) {
+                console.log("account with id: " + account.version + " saved");
+            },
+            error: function (e) {
+                console.log(e.responseText);
+            },
+            complete: function () {
+                // fetchAccounts();
+                // $('#accountsTable').bootstrapTable("load", '');
+                // $('#accountsTable').bootstrapTable("refresh", '');
+                // $('#accountsTable').bootstrapTable("reload", '');
+                $('#editModal').modal('toggle');
+            },
+        });
+    });
+
+    $('.refresh').click(function() {
+        alert('refresh');
+        // $('#table').bootstrapTable('refresh');
+    });
+
+    $("#confirmDeleteButton").click(function () {
+        var version = $("#deleteModal .modal-body #version").val();
+
+        $.ajax({
+            type: "DELETE",
+            // url: "http://35.224.29.208/account/v1/list",
+            url: "http://localhost:8080/account/v1/" + version,
+            success: function (version) {
+                console.log("account with id: " + version + " deleted");
+            },
+            error: function (e) {
+                console.log(e.responseText);
+            }
+        });
+        $('#deleteModal').modal('toggle');
+        fetchAccounts();
+    });
+
+    $(document).on("click", ".editButton", function () {
+        var accountId = $(this).data('id');
+
+        $.ajax({
+            type: "GET",
+            dataType: 'json',
+            // url: "http://35.224.29.208/account/v1/list",
+            url: "http://localhost:8080/account/v1/" + accountId,
+            success: function (account) {
+                $("#editModal .modal-body #id").val(account.version);
+                $("#editModal .modal-body #name").val(account.name);
+                $("#editModal .modal-body #desc").val(account.description);
+                $("#editModal .modal-body #userId").val(account.userId);
+                $("#editModal .modal-body #pwdHint").val(account.passwordHint);
+                $("#editModal .modal-body #pinHint").val(account.pinHint);
+                $("#editModal .modal-body #url").val(account.url);
+                $("#editModal .modal-body #category").val(account.category);
+                $("#editModal .modal-body #notes").val(account.notes);
+            },
+            error: function (e) {
+                console.log(e.responseText);
+            }
+        });
+    });
+
+    $(document).on("click", ".deleteButton", function () {
+        var accountId = $(this).data('id');
+
+        $.ajax({
+            type: "GET",
+            dataType: 'json',
+            // url: "http://35.224.29.208/account/v1/list",
+            url: "http://localhost:8080/account/v1/" + accountId,
+            success: function (account) {
+                var confirmDiv = $("#deleteModal .modal-body #version");
+                confirmDiv.val(account.version);
+                confirmDiv.html(account.name);
+            },
+            error: function (e) {
+                console.log(e.responseText);
+            }
+        });
+    });
+
+    function fetchAccounts() {
+        $.ajax({
+            type: "GET",
+            dataType: 'json',
+            // url: "http://35.224.29.208/account/v1/list",
+            url: "http://localhost:8080/account/v1/list",
+            success: function (data) {
+                $('#accountsTable').bootstrapTable({
+                    data: data,
+                    rowStyle(row, index) {
+                        return {
+                            classes: 'text-nowrap',
+                            css: {"font-family": "Helvetica Neue, serif", "font-size": "11px"}
+                        };
+                    }
+                });
+            },
+            error: function (e) {
+                console.log(e.responseText);
+            }
+        });
+    }
 
     $(document).ready(function () {
-
         fetchAccounts();
-
-        function fetchAccounts() {
-            $.ajax({
-                type: "GET",
-                dataType: 'json',
-                // url: "http://35.224.29.208/account/v1/list",
-                url: "http://localhost:8080/account/v1/list",
-                success: function (data) {
-                    $('#accountsTable').bootstrapTable({
-                        data: data,
-                        rowStyle(row, index) {
-                            return {
-                                classes: 'text-nowrap',
-                                css: {"font-family": "Helvetica Neue, serif", "font-size": "12px"}
-                            };
-                        }
-                    });
-                    // checkForOutOfStocks();
-                },
-                error: function (e) {
-                    console.log(e.responseText);
-                }
-            });
-        }
-
-        // $("#oosCheckBtn").click(function () {
-        //     checkForOutOfStocks();
-        // });
-
     })
 </script>
 </body>

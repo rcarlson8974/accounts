@@ -59,7 +59,7 @@ dependencies {
 }
 
 task generateHollowDomain(type: JavaExec) {
-    main = 'com.tgt.gxc.rfid.hollow.HollowDomainGenerator'
+    main = 'com.os.accounts.hollow.HollowDomainGenerator'
     classpath = sourceSets.main.runtimeClasspath
 }
 

@@ -92,21 +92,21 @@ class AccountControllerSpec extends BaseAccountSpecification {
 
     def 'delete account'() {
         when:
-        def response = accountController.delete(account1)
+        def response = accountController.delete(account1.version)
 
         then:
-        1 * accountService.delete(account1)
+        1 * accountService.delete(account1.version)
         0 * _
         response.status == HttpStatus.OK
-        response.body() == account1
+        response.body() == account1.version
     }
 
     def 'delete account handles exception being thrown'() {
         when:
-        def response = accountController.delete(account1)
+        def response = accountController.delete(account1.version)
 
         then:
-        1 * accountService.delete(account1) >> {
+        1 * accountService.delete(account1.version) >> {
             throw new Exception("delete account blew up")
         }
         0 * _

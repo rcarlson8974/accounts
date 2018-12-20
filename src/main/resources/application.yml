@@ -8,6 +8,7 @@ micronaut:
           allowedMethods:
             - POST
             - GET
+            - DELETE
   application:
     name: "accounts"
     api:

@@ -6,6 +6,7 @@ import com.netflix.hollow.api.producer.fs.HollowFilesystemAnnouncer
 import com.netflix.hollow.api.producer.fs.HollowFilesystemPublisher
 import com.os.accounts.domain.Account
 import groovy.util.logging.Slf4j
+import io.micronaut.context.annotation.Value
 
 import javax.inject.Singleton
 import java.nio.file.Path
@@ -14,7 +15,13 @@ import java.nio.file.Path
 @Slf4j
 class AccountProducer {
 
-    Path localPublishDir = new File("/tmp/hollow").toPath()
+    @Value('${micronaut.application.hollow.account.path}')
+    String hollowLocationPath
+
+    @Value('${micronaut.application.hollow.account.version}')
+    String hollowLocationVersion
+
+    Path localPublishDir = new File("${hollowLocationPath}/${hollowLocationVersion}").toPath()
 
     HollowFilesystemPublisher publisher = new HollowFilesystemPublisher(localPublishDir)
     HollowFilesystemAnnouncer announcer = new HollowFilesystemAnnouncer(localPublishDir)
