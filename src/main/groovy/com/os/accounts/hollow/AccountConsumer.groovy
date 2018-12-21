@@ -22,10 +22,9 @@ class AccountConsumer {
     @Value('${micronaut.application.hollow.account.version}')
     String hollowLocationVersion
 
-    Path localPublishDir = new File("${hollowLocationPath}/${hollowLocationVersion}").toPath()
-
-    HollowFilesystemBlobRetriever blobRetriever = new HollowFilesystemBlobRetriever(localPublishDir)
-    HollowFilesystemAnnouncementWatcher announcementWatcher = new HollowFilesystemAnnouncementWatcher(localPublishDir)
+    Path localPublishDir
+    HollowFilesystemBlobRetriever blobRetriever
+    HollowFilesystemAnnouncementWatcher announcementWatcher
     HollowConsumer hollowConsumer
     AccountPrimaryKeyIndex accountPrimaryKeyIndex
     boolean indexReady = false
@@ -34,6 +33,9 @@ class AccountConsumer {
     void setupConsumer() {
 
         if (!consumerReady) {
+            localPublishDir = new File("${hollowLocationPath}/${hollowLocationVersion}").toPath()
+            blobRetriever = new HollowFilesystemBlobRetriever(localPublishDir)
+            announcementWatcher = new HollowFilesystemAnnouncementWatcher(localPublishDir)
             hollowConsumer = HollowConsumer.withBlobRetriever(blobRetriever)
                     .withAnnouncementWatcher(announcementWatcher)
                     .withGeneratedAPIClass(AccountAPI)

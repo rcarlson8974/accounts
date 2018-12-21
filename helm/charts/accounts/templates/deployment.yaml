@@ -23,7 +23,7 @@ spec:
       labels:
         app: {{ .Chart.Name }}
       annotations:
-        checksum/config: {{ include (print $.Chart.Name "/templates/_configmap.yaml") . | sha256sum }}
+        checksum/config: {{ include (print $.Chart.Name "/templates/configmap.yaml") . | sha256sum }}
     spec:
       containers:
       - name: {{ .Chart.Name }}
@@ -53,6 +53,8 @@ spec:
         volumeMounts:
         - name: "{{ .Chart.Name }}-config-volume"
           mountPath: /config
+        - name: "{{ .Chart.Name }}-static-volume"
+          mountPath: /static
       volumes:
       - name: "{{ .Chart.Name }}-config-volume"
         configMap:
@@ -60,3 +62,11 @@ spec:
           items:
           - key: "{{ .Chart.Name }}-configmap-key"
             path: application.yml
+      - name: "{{ .Chart.Name }}-static-volume"
+        configMap:
+          name: "{{ .Chart.Name }}-static-configmap"
+          items:
+          - key: "{{ .Chart.Name }}-css-key"
+            path: account.css
+          - key: "{{ .Chart.Name }}-index-key"
+            path: index.html

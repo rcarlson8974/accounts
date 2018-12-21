@@ -1,26 +1,6 @@
 td.accountRow {
-    font-size: 15px;
+    font-size: 12px;
     font-family: "Helvetica Neue", serif;
-}
-
-td.red {
-    background-color: red;
-}
-
-td.orange {
-    background-color: orange;
-}
-
-td.yellow {
-    background-color: yellow;
-}
-
-td.light-green {
-    background-color: lightgreen;
-}
-
-td.green {
-    background-color: green;
 }
 
 thead {

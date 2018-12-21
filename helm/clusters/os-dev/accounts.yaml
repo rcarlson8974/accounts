@@ -5,11 +5,12 @@ deployment:
   maxReplicas: 1
 configmap:
   properties:
+    api:
+      version: 'v1'
     hollow:
-      bucket: 'os-account-data'
-      domain: 'hollow-dev/accounts'
-      namespace: 'v1'
-      applicationName: 'accounts-1.0'
-
+      account:
+        path: '/tmp/hollow/dev/account'
+        version: 'v1'
+        numStatesBetweenSnapshots: 1
 ingress:
   host: us-central1-dev.gcp.cloud.os.internal

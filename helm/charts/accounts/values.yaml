@@ -34,15 +34,15 @@ deployment:
       cpu: 1000m
       memory: 1Gi
 service:
-#  type: LoadBalancer
   type: NodePort
-#  loadBalancerIP: 35.224.29.208
   externalPort: 80
   internalPort: 8080
-#configmap:
-#  properties:
-#    hollow:
-#      bucket: 'os-account-data'
-#      domain: 'hollow-dev/accounts'
-#      namespace: 'v1'
-#      applicationName: 'accounts-1.0'
+configmap:
+  properties:
+    api:
+      version: 'v1'
+    hollow:
+      account:
+        path: '/tmp/hollow/dev/account'
+        version: 'v1'
+        numStatesBetweenSnapshots: 1

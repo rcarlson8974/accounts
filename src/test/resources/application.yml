@@ -1,22 +1,28 @@
 micronaut:
-    application:
-        name: accounts
-    server:
-#        port: 8080
-        cors:
-            enabled: true
-hystrix:
-  stream:
-    enabled: true
-consul:
-  client:
-    defaultZone: ${CONSUL_HOST:localhost}:${CONSUL_PORT:8500}
-accounts:
-  api:
-    version: v1
-router:
-    static:
-        resources:
-            enabled: true
-            mapping: /static/**
-            paths: classpath:public,classpath:js
+  server:
+    port: 8080
+    cors:
+      enabled: true
+      configurations:
+        web:
+          allowedMethods:
+            - POST
+            - GET
+            - DELETE
+  application:
+    name: "accounts"
+    api:
+      version: v1
+    hollow:
+      account:
+        path: /tmp/hollow/prod/account
+        version: v1
+        numStatesBetweenSnapshots: 1
+  router:
+    static-resources:
+      default:
+        paths: classpath:static
+        mapping: /**
+      swagger:
+        paths: classpath:META-INF/swagger
+        mapping: /swagger/**

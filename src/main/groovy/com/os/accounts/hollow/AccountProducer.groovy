@@ -10,10 +10,13 @@ import io.micronaut.context.annotation.Value
 
 import javax.inject.Singleton
 import java.nio.file.Path
+import java.util.concurrent.Executors
 
 @Singleton
 @Slf4j
 class AccountProducer {
+
+    private static final long TYPE_SHARDING_SIZE = 25 * 1024 * 1024 //25 MB
 
     @Value('${micronaut.application.hollow.account.path}')
     String hollowLocationPath
@@ -21,23 +24,42 @@ class AccountProducer {
     @Value('${micronaut.application.hollow.account.version}')
     String hollowLocationVersion
 
-    Path localPublishDir = new File("${hollowLocationPath}/${hollowLocationVersion}").toPath()
+    @Value('${micronaut.application.hollow.account.numStatesBetweenSnapshots:1}')
+    Integer numStatesBetweenSnapshots
 
-    HollowFilesystemPublisher publisher = new HollowFilesystemPublisher(localPublishDir)
-    HollowFilesystemAnnouncer announcer = new HollowFilesystemAnnouncer(localPublishDir)
+    Path localPublishDir
+    HollowFilesystemPublisher publisher
+    HollowFilesystemAnnouncer announcer
+    HollowProducer producer
+    HollowIncrementalProducer incrementalProducer
+    boolean producerSetup = false
 
-    HollowProducer producer = HollowProducer.withPublisher(publisher)
-            .withAnnouncer(announcer)
-            .build()
-    HollowIncrementalProducer incrementalProducer = new HollowIncrementalProducer(producer)
+    void setupProducer() {
+        if(!producerSetup)   {
+            localPublishDir = new File("${hollowLocationPath}/${hollowLocationVersion}").toPath()
+            publisher = new HollowFilesystemPublisher(localPublishDir)
+            announcer = new HollowFilesystemAnnouncer(localPublishDir)
+            producer = HollowProducer.withPublisher(publisher)
+                    .withAnnouncer(announcer)
+                    .withNumStatesBetweenSnapshots(numStatesBetweenSnapshots)
+                    .withSnapshotPublishExecutor(Executors.newSingleThreadExecutor())
+                    .withTargetMaxTypeShardSize(TYPE_SHARDING_SIZE)
+                    .build()
+            incrementalProducer = new HollowIncrementalProducer(producer)
+            producerSetup = true
+        }
+
+    }
 
     void save(Account account) {
+        setupProducer()
         incrementalProducer.addOrModify(account)
         long nextVersion = incrementalProducer.runCycle()
         log.debug("Saved new account with version: ${nextVersion}")
     }
 
     void saveAccounts(List<Account> accounts) {
+        setupProducer()
         accounts.each {
             incrementalProducer.addOrModify(it)
         }
@@ -46,6 +68,7 @@ class AccountProducer {
     }
 
     void delete(Account account) {
+        setupProducer()
         incrementalProducer.delete(account)
         long nextVersion = incrementalProducer.runCycle()
         log.debug("Deleted account with version: ${nextVersion}")

@@ -128,7 +128,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button id="cancelEditButton" type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button id="cancelEditButton" type="button" class="btn btn-secondary" data-dismiss="modal">Cancel
+                </button>
                 <button id="saveButton" type="button" class="btn btn-primary">Save changes</button>
             </div>
         </div>
@@ -136,7 +137,8 @@
 </div>
 
 <!-- Delete Modal -->
-<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -150,7 +152,8 @@
                 <div id="version"></div>
             </div>
             <div class="modal-footer">
-                <button id="cancelDeleteButton" type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button id="cancelDeleteButton" type="button" class="btn btn-secondary" data-dismiss="modal">Cancel
+                </button>
                 <button id="confirmDeleteButton" type="button" class="btn btn-danger btn-ok">Confirm</button>
             </div>
         </div>
@@ -169,12 +172,12 @@
 
 <script>
 
-    // window.icons = {
-    //     refresh: 'fa-refresh',
-    //     toggleOn: 'fa-toggle-on',
-    //     toggleOff: 'fa-toggle-on',
-    //     columns: 'fa-th-list'
-    // };
+    var protocol = "http";
+    // var host = "35.224.29.208";
+    var host = "35.244.232.10";
+    // var host = "osaccounts-api-service";
+    // var port = "8080";
+    var port = "80";
 
     function addButtons(value, row, index) {
         return "<button type=\"button\" class=\"editButton btn btn-primary btn-sm\" data-id=" + row.version + " data-toggle=\"modal\" data-target=\"#editModal\">Edit</button> " +
@@ -208,28 +211,19 @@
             type: "POST",
             dataType: 'json',
             contentType: "application/json; charset=utf-8",
-            // url: "http://35.224.29.208/account/v1/list",
-            url: "http://localhost:8080/account/v1/save",
+            url: protocol + "://" + host + ":" + port + "/account/v1/save",
             data: JSON.stringify(account),
             success: function (account) {
                 console.log("account with id: " + account.version + " saved");
             },
             error: function (e) {
                 console.log(e.responseText);
+                console.log(e.re);
             },
             complete: function () {
-                // fetchAccounts();
-                // $('#accountsTable').bootstrapTable("load", '');
-                // $('#accountsTable').bootstrapTable("refresh", '');
-                // $('#accountsTable').bootstrapTable("reload", '');
                 $('#editModal').modal('toggle');
             },
         });
-    });
-
-    $('.refresh').click(function() {
-        alert('refresh');
-        // $('#table').bootstrapTable('refresh');
     });
 
     $("#confirmDeleteButton").click(function () {
@@ -237,8 +231,7 @@
 
         $.ajax({
             type: "DELETE",
-            // url: "http://35.224.29.208/account/v1/list",
-            url: "http://localhost:8080/account/v1/" + version,
+            url: protocol + "://" + host + ":" + port + "/account/v1/" + version,
             success: function (version) {
                 console.log("account with id: " + version + " deleted");
             },
@@ -256,8 +249,7 @@
         $.ajax({
             type: "GET",
             dataType: 'json',
-            // url: "http://35.224.29.208/account/v1/list",
-            url: "http://localhost:8080/account/v1/" + accountId,
+            url: protocol + "://" + host + ":" + port + "/account/v1/" + accountId,
             success: function (account) {
                 $("#editModal .modal-body #id").val(account.version);
                 $("#editModal .modal-body #name").val(account.name);
@@ -281,8 +273,7 @@
         $.ajax({
             type: "GET",
             dataType: 'json',
-            // url: "http://35.224.29.208/account/v1/list",
-            url: "http://localhost:8080/account/v1/" + accountId,
+            url: protocol + "://" + host + ":" + port + "/account/v1/" + accountId,
             success: function (account) {
                 var confirmDiv = $("#deleteModal .modal-body #version");
                 confirmDiv.val(account.version);
@@ -298,8 +289,7 @@
         $.ajax({
             type: "GET",
             dataType: 'json',
-            // url: "http://35.224.29.208/account/v1/list",
-            url: "http://localhost:8080/account/v1/list",
+            url: protocol + "://" + host + ":" + port + "/account/v1/list",
             success: function (data) {
                 $('#accountsTable').bootstrapTable({
                     data: data,
@@ -311,8 +301,22 @@
                     }
                 });
             },
-            error: function (e) {
-                console.log(e.responseText);
+            error: function (jqXHR, exception) {
+                if (jqXHR.status === 0) {
+                    console.log('Not connect.\n Verify Network.');
+                } else if (jqXHR.status === 404) {
+                    console.log('Requested page not found. [404]');
+                } else if (jqXHR.status === 500) {
+                    console.log('Internal Server Error [500].');
+                } else if (exception === 'parsererror') {
+                    console.log('Requested JSON parse failed.');
+                } else if (exception === 'timeout') {
+                    console.log('Time out error.');
+                } else if (exception === 'abort') {
+                    console.log('Ajax request aborted.');
+                } else {
+                    console.log('Uncaught Error.\n' + jqXHR.responseText);
+                }
             }
         });
     }

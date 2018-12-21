@@ -15,8 +15,9 @@ micronaut:
       version: v1
     hollow:
       account:
-        path: /tmp/hollow/prod/account
+        path: /tmp/hollow/dev/account
         version: v1
+        numStatesBetweenSnapshots: 1
   router:
     static-resources:
       default:
