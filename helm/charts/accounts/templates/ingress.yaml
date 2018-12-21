@@ -11,11 +11,6 @@ metadata:
     app: {{ .Chart.Name }}
     version: {{ .Values.deployment.image.tag | quote }}
 spec:
-  rules:
-  - host: "os-{{ .Chart.Name }}-{{ .Values.env }}.{{ .Values.ingress.host }}"
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: "{{ .Chart.Name }}-service"
-          servicePort: {{ .Values.service.externalPort }}
+  backend:
+    serviceName: "{{ .Chart.Name }}-service"
+    servicePort: {{ .Values.service.externalPort }}

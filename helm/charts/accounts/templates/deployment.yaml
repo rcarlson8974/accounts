@@ -23,7 +23,7 @@ spec:
       labels:
         app: {{ .Chart.Name }}
       annotations:
-        checksum/config: {{ include (print $.Chart.Name "/templates/configmap.yaml") . | sha256sum }}
+        checksum/config: {{ include (print $.Chart.Name "/templates/_configmap.yaml") . | sha256sum }}
     spec:
       containers:
       - name: {{ .Chart.Name }}

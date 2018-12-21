@@ -12,9 +12,9 @@ metadata:
     version: {{ .Values.deployment.image.tag | quote }}
 spec:
   type: {{ .Values.service.type }}
-  loadBalancerIP: {{ .Values.service.loadBalancerIP }}
+#  loadBalancerIP: {{ .Values.service.loadBalancerIP }}
+  selector:
+    app: {{ .Chart.Name }}
   ports:
     - port: {{ .Values.service.externalPort }}
       targetPort: {{ .Values.service.internalPort }}
-  selector:
-    app: {{ .Chart.Name }}

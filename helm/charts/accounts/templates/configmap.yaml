@@ -1,18 +1,21 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: "{{ .Chart.Name }}-configmap"
-  namespace: "os-{{ .Values.env }}"
+  name: osaccounts-api-configmap
+  namespace: os-dev
   labels:
-    app: {{ .Chart.Name }}
-    chart: "{{ .Chart.Name }}-{{ .Values.deployment.image.tag }}"
-    heritage: {{ .Release.Service | quote }}
-    release: {{ .Release.Name | quote }}
-    version: {{ .Values.deployment.image.tag | quote }}
+    app: osaccounts-api
+    chart: osaccounts-api-latest
+    heritage: Tiller
+    release: accounts-release
+    version: latest
 data:
-  {{ .Chart.Name }}-configmap-key: |
-    hollow:
-      bucket: "{{ .Values.configmap.properties.hollow.bucket }}"
-      domain: "{{ .Values.configmap.properties.hollow.domain }}"
-      namespace: "{{ .Values.configmap.properties.hollow.namespace }}"
-      applicationName: "{{ .Values.configmap.properties.hollow.applicationName }}"
+  osaccounts-api-configmap-key: |
+    micronaut:
+      application:
+        api:
+          version: v1
+        hollow:
+          account:
+            path: /tmp/hollow/prod/account
+            version: v1
