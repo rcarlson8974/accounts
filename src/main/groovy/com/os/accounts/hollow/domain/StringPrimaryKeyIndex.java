@@ -2,10 +2,11 @@ package com.os.accounts.hollow.domain;
 
 import com.netflix.hollow.api.consumer.HollowConsumer;
 import com.netflix.hollow.api.consumer.index.AbstractHollowUniqueKeyIndex;
+import com.netflix.hollow.api.consumer.index.HollowUniqueKeyIndex;
 import com.netflix.hollow.core.schema.HollowObjectSchema;
 
 @SuppressWarnings("all")
-public class StringPrimaryKeyIndex extends AbstractHollowUniqueKeyIndex<AccountAPI, HString> {
+public class StringPrimaryKeyIndex extends AbstractHollowUniqueKeyIndex<AccountAPI, HString> implements HollowUniqueKeyIndex<HString> {
 
     public StringPrimaryKeyIndex(HollowConsumer consumer) {
         this(consumer, true);
@@ -23,6 +24,7 @@ public class StringPrimaryKeyIndex extends AbstractHollowUniqueKeyIndex<AccountA
         super(consumer, "String", isListenToDataRefresh, fieldPaths);
     }
 
+    @Override
     public HString findMatch(Object... keys) {
         int ordinal = idx.getMatchingOrdinal(keys);
         if(ordinal == -1)

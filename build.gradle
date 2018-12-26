@@ -59,7 +59,7 @@ dependencies {
 }
 
 task generateHollowDomain(type: JavaExec) {
-    main = 'com.os.accounts.hollow.HollowDomainGenerator'
+    main = 'com.os.accounts.hollow.AccountGenerator'
     classpath = sourceSets.main.runtimeClasspath
 }
 

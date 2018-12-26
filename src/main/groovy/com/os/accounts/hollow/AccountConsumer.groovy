@@ -40,10 +40,11 @@ class AccountConsumer {
                     .withAnnouncementWatcher(announcementWatcher)
                     .withGeneratedAPIClass(AccountAPI)
                     .build()
-            log.info 'Triggering hollow api refresh...'
-            hollowConsumer.triggerRefresh()
             consumerReady = true
         }
+
+        log.info 'Triggering hollow api refresh...'
+        hollowConsumer.triggerRefresh()
 
         while (!indexReady) {
             try {
@@ -58,9 +59,9 @@ class AccountConsumer {
         }
     }
 
-    Account findAccount(String accountId) {
+    Account findAccount(String accountName) {
         setupConsumer()
-        def hollowAccount = accountPrimaryKeyIndex.findMatch(accountId)
+        def hollowAccount = accountPrimaryKeyIndex.findMatch(accountName)
         return hollowAccount ? transformHollowAccount(hollowAccount) : null
     }
 
@@ -81,7 +82,6 @@ class AccountConsumer {
 
     static Account transformHollowAccount(com.os.accounts.hollow.domain.Account hollowAccount) {
         return new Account(
-                version: hollowAccount.version.value,
                 name: hollowAccount.name.value,
                 description: hollowAccount.description.value,
                 userId: hollowAccount.userId?.value,

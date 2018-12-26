@@ -39,8 +39,6 @@ class AccountConsumerSpec extends BaseAccountSpecification {
         AccountConsumer.transformHollowAccounts([hollowAccount1, hollowAccount2])
 
         then:
-        1 * hollowAccount1.version >> mockString
-        1 * mockString.getValue() >> "verison1"
         1 * hollowAccount1.name >> mockString
         1 * mockString.getValue() >> "account1"
         1 * hollowAccount1.description >> mockString
@@ -58,8 +56,6 @@ class AccountConsumerSpec extends BaseAccountSpecification {
         1 * hollowAccount1.notes >> mockString
         1 * mockString.getValue() >> "notes1"
 
-        1 * hollowAccount2.version >> mockString
-        1 * mockString.getValue() >> "verison2"
         1 * hollowAccount2.name >> mockString
         1 * mockString.getValue() >> "account2"
         1 * hollowAccount2.description >> mockString

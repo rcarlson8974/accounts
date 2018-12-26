@@ -13,7 +13,7 @@
 <body>
 
 <div id="accountsContainer" class="container">
-    <h1>OS Accounts</h1>
+    <h1 id="accountHeader">OS Accounts</h1>
     <div class="table-hover table-bordered table-striped table-responsive-sm">
         <table id="accountsTable"
                data-toolbar="#toolbar"
@@ -33,6 +33,9 @@
                data-page-list="[10, 25, 50, 100, ALL]"
                data-page-size="100"
                data-show-footer="true">
+            <div class="float-left custom">
+                <button id="createButton" type="button" class="btn btn-primary">Create Account</button>
+            </div>
             <thead>
             <tr>
                 <th scope="col" data-field="name" data-sortable="true">Name</th>
@@ -50,12 +53,13 @@
     </div>
 </div>
 
-<!-- Edit Modal -->
-<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+<!-- Manage Account Modal -->
+<div class="modal fade" id="manageAccountModal" tabindex="-1" role="dialog" aria-labelledby="manageAccountModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editModalLabel">Edit Account</h5>
+                <h5 class="modal-title" id="manageAccountModalLabel">Manage Account</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -65,64 +69,55 @@
                     <div class="form-group row" style="display: none;">
                         <label for="id" class="col-sm-2 col-form-label col-form-label-sm">ID</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control form-control-sm" id="id"
-                                   placeholder="">
+                            <input type="text" class="form-control form-control-sm" id="id" placeholder="">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="name" class="col-sm-2 col-form-label col-form-label-sm">Name</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control form-control-sm" id="name"
-                                   placeholder="">
+                            <input type="text" class="form-control form-control-sm" id="name" placeholder="">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="desc" class="col-sm-2 col-form-label col-form-label-sm">Desc</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control form-control-sm" id="desc"
-                                   placeholder="">
+                            <input type="text" class="form-control form-control-sm" id="desc" placeholder="">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="userId" class="col-sm-2 col-form-label col-form-label-sm">User ID</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control form-control-sm" id="userId"
-                                   placeholder="">
+                            <input type="text" class="form-control form-control-sm" id="userId" placeholder="">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="pwdHint" class="col-sm-2 col-form-label col-form-label-sm">Password Hint</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control form-control-sm" id="pwdHint"
-                                   placeholder="">
+                            <input type="text" class="form-control form-control-sm" id="pwdHint" placeholder="">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="pinHint" class="col-sm-2 col-form-label col-form-label-sm">Pin Hint</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control form-control-sm" id="pinHint"
-                                   placeholder="">
+                            <input type="text" class="form-control form-control-sm" id="pinHint" placeholder="">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="url" class="col-sm-2 col-form-label col-form-label-sm">URL</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control form-control-sm" id="url"
-                                   placeholder="">
+                            <input type="text" class="form-control form-control-sm" id="url" placeholder="">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="category" class="col-sm-2 col-form-label col-form-label-sm">Category</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control form-control-sm" id="category"
-                                   placeholder="">
+                            <input type="text" class="form-control form-control-sm" id="category" placeholder="">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="notes" class="col-sm-2 col-form-label col-form-label-sm">Notes</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control form-control-sm" id="notes"
-                                   placeholder="">
+                            <input type="text" class="form-control form-control-sm" id="notes" placeholder="">
                         </div>
                     </div>
                 </form>
@@ -136,8 +131,8 @@
     </div>
 </div>
 
-<!-- Delete Modal -->
-<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+<!-- Delete Account Modal -->
+<div class="modal fade" id="deleteAccountModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -149,7 +144,7 @@
             </div>
             <div class="modal-body">
                 Are you sure you wish to delete the following account?
-                <div id="version"></div>
+                <div id="deleteAccountName"></div>
             </div>
             <div class="modal-footer">
                 <button id="cancelDeleteButton" type="button" class="btn btn-secondary" data-dismiss="modal">Cancel
@@ -160,8 +155,7 @@
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"
-        crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
         integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
         crossorigin="anonymous"></script>
@@ -174,30 +168,45 @@
 
     var protocol = "http";
     // var host = "35.224.29.208";
-    var host = "35.244.232.10";
-    // var host = "osaccounts-api-service";
-    // var port = "8080";
-    var port = "80";
+    // var host = "35.244.232.10";
+    var host = "localhost";
+    var port = "8080";
+
+    // var port = "80";
 
     function addButtons(value, row, index) {
-        return "<button type=\"button\" class=\"editButton btn btn-primary btn-sm\" data-id=" + row.version + " data-toggle=\"modal\" data-target=\"#editModal\">Edit</button> " +
-            "<button type=\"button\" class=\"deleteButton btn btn-danger btn-sm\" data-id=" + row.version + " data-toggle=\"modal\" data-target=\"#deleteModal\">Delete</button>";
+        return "<button type=\"button\" class=\"editButton btn btn-primary btn-sm\" data-name='" + row.name + "' data-toggle=\"modal\" data-target=\"#manageAccountModal\">Edit</button> " +
+            "<button type=\"button\" class=\"deleteButton btn btn-danger btn-sm\" data-name='" + row.name + "' data-toggle=\"modal\" data-target=\"#deleteAccountModal\">Delete</button>";
     }
 
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function reload() {
+        console.log('Taking a break...');
+        await sleep(1000);
+        location.reload(true);
+        console.log('Two seconds later');
+    }
+
+    $("#createButton").click(function () {
+        $("#manageAccountModalLabel").html('Create Account');
+        $('#manageAccountModal').modal('toggle');
+    });
+
     $("#saveButton").click(function () {
-        var version = $("#editModal .modal-body #id").val();
-        var name = $("#editModal .modal-body #name").val();
-        var desc = $("#editModal .modal-body #desc").val();
-        var userId = $("#editModal .modal-body #userId").val();
-        var pwdHint = $("#editModal .modal-body #pwdHint").val();
-        var pinHint = $("#editModal .modal-body #pinHint").val();
-        var url = $("#editModal .modal-body #url").val();
-        var category = $("#editModal .modal-body #category").val();
-        var notes = $("#editModal .modal-body #notes").val();
+        var name = $("#manageAccountModal .modal-body #name").val();
+        var desc = $("#manageAccountModal .modal-body #desc").val();
+        var userId = $("#manageAccountModal .modal-body #userId").val();
+        var pwdHint = $("#manageAccountModal .modal-body #pwdHint").val();
+        var pinHint = $("#manageAccountModal .modal-body #pinHint").val();
+        var url = $("#manageAccountModal .modal-body #url").val();
+        var category = $("#manageAccountModal .modal-body #category").val();
+        var notes = $("#manageAccountModal .modal-body #notes").val();
 
         var account = {
-            version: version,
-            name: name,
+            name: name.toUpperCase(),
             description: desc,
             userId: userId,
             passwordHint: pwdHint,
@@ -206,7 +215,59 @@
             category: category,
             notes: notes
         };
+        saveAccount(account);
+        $('#manageAccountModal').modal('toggle');
+        fetchAccounts();
+        reload();
+    });
 
+    $("#confirmDeleteButton").click(function () {
+        var accountName = $("#deleteAccountModal .modal-body #deleteAccountName").html();
+        deleteAccount(accountName);
+        fetchAccounts();
+        reload();
+    });
+
+    $(document).on("click", ".editButton", function () {
+        var accountName = $(this).data('name');
+        fetchAccount(accountName);
+    });
+
+    $(document).on("click", ".deleteButton", function () {
+        var accountName = $(this).data('name');
+        var deleteAccountName = $("#deleteAccountModal .modal-body #deleteAccountName");
+        deleteAccountName.html(accountName);
+    });
+
+    function hydrateManageAccountForm(account) {
+        $("#manageAccountModal .modal-body #name").val(account.name);
+        $("#manageAccountModal .modal-body #desc").val(account.description);
+        $("#manageAccountModal .modal-body #userId").val(account.userId);
+        $("#manageAccountModal .modal-body #pwdHint").val(account.passwordHint);
+        $("#manageAccountModal .modal-body #pinHint").val(account.pinHint);
+        $("#manageAccountModal .modal-body #url").val(account.url);
+        $("#manageAccountModal .modal-body #category").val(account.category);
+        $("#manageAccountModal .modal-body #notes").val(account.notes);
+    }
+
+    function deleteAccount(accountName) {
+        $.ajax({
+            type: "DELETE",
+            url: protocol + "://" + host + ":" + port + "/account/v1/" + accountName,
+            success: function () {
+                console.log("Deleted account: " + accountName);
+            },
+            error: function (jqXHR, exception) {
+                handleError(jqXHR, exception)
+            },
+            complete: function () {
+                $('#deleteAccountModal').modal('toggle');
+            },
+        });
+
+    }
+
+    function saveAccount(account) {
         $.ajax({
             type: "POST",
             dataType: 'json',
@@ -214,76 +275,31 @@
             url: protocol + "://" + host + ":" + port + "/account/v1/save",
             data: JSON.stringify(account),
             success: function (account) {
-                console.log("account with id: " + account.version + " saved");
+                console.log("Saved account: " + JSON.stringify(account));
             },
-            error: function (e) {
-                console.log(e.responseText);
-                console.log(e.re);
+            error: function (jqXHR, exception) {
+                handleError(jqXHR, exception)
             },
             complete: function () {
-                $('#editModal').modal('toggle');
+                $('#manageAccountModal').modal('toggle');
             },
         });
-    });
 
-    $("#confirmDeleteButton").click(function () {
-        var version = $("#deleteModal .modal-body #version").val();
+    }
 
-        $.ajax({
-            type: "DELETE",
-            url: protocol + "://" + host + ":" + port + "/account/v1/" + version,
-            success: function (version) {
-                console.log("account with id: " + version + " deleted");
-            },
-            error: function (e) {
-                console.log(e.responseText);
-            }
-        });
-        $('#deleteModal').modal('toggle');
-        fetchAccounts();
-    });
-
-    $(document).on("click", ".editButton", function () {
-        var accountId = $(this).data('id');
-
+    function fetchAccount(accountName) {
         $.ajax({
             type: "GET",
             dataType: 'json',
-            url: protocol + "://" + host + ":" + port + "/account/v1/" + accountId,
+            url: protocol + "://" + host + ":" + port + "/account/v1/" + accountName,
             success: function (account) {
-                $("#editModal .modal-body #id").val(account.version);
-                $("#editModal .modal-body #name").val(account.name);
-                $("#editModal .modal-body #desc").val(account.description);
-                $("#editModal .modal-body #userId").val(account.userId);
-                $("#editModal .modal-body #pwdHint").val(account.passwordHint);
-                $("#editModal .modal-body #pinHint").val(account.pinHint);
-                $("#editModal .modal-body #url").val(account.url);
-                $("#editModal .modal-body #category").val(account.category);
-                $("#editModal .modal-body #notes").val(account.notes);
+                hydrateManageAccountForm(account);
             },
-            error: function (e) {
-                console.log(e.responseText);
+            error: function (jqXHR, exception) {
+                handleError(jqXHR, exception)
             }
         });
-    });
-
-    $(document).on("click", ".deleteButton", function () {
-        var accountId = $(this).data('id');
-
-        $.ajax({
-            type: "GET",
-            dataType: 'json',
-            url: protocol + "://" + host + ":" + port + "/account/v1/" + accountId,
-            success: function (account) {
-                var confirmDiv = $("#deleteModal .modal-body #version");
-                confirmDiv.val(account.version);
-                confirmDiv.html(account.name);
-            },
-            error: function (e) {
-                console.log(e.responseText);
-            }
-        });
-    });
+    }
 
     function fetchAccounts() {
         $.ajax({
@@ -302,28 +318,33 @@
                 });
             },
             error: function (jqXHR, exception) {
-                if (jqXHR.status === 0) {
-                    console.log('Not connect.\n Verify Network.');
-                } else if (jqXHR.status === 404) {
-                    console.log('Requested page not found. [404]');
-                } else if (jqXHR.status === 500) {
-                    console.log('Internal Server Error [500].');
-                } else if (exception === 'parsererror') {
-                    console.log('Requested JSON parse failed.');
-                } else if (exception === 'timeout') {
-                    console.log('Time out error.');
-                } else if (exception === 'abort') {
-                    console.log('Ajax request aborted.');
-                } else {
-                    console.log('Uncaught Error.\n' + jqXHR.responseText);
-                }
+                handleError(jqXHR, exception)
             }
         });
+    }
+
+    function handleError(jqXHR, exception) {
+        if (jqXHR.status === 0) {
+            console.log('Not connect.\n Verify Network.');
+        } else if (jqXHR.status === 404) {
+            console.log('Requested page not found. [404]');
+        } else if (jqXHR.status === 500) {
+            console.log('Internal Server Error [500].');
+        } else if (exception === 'parsererror') {
+            console.log('Requested JSON parse failed.');
+        } else if (exception === 'timeout') {
+            console.log('Time out error.');
+        } else if (exception === 'abort') {
+            console.log('Ajax request aborted.');
+        } else {
+            console.log('Uncaught Error.\n' + jqXHR.responseText);
+        }
     }
 
     $(document).ready(function () {
         fetchAccounts();
     })
+
 </script>
 </body>
 </html>

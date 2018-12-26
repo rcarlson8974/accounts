@@ -18,13 +18,13 @@ class AccountController {
     @Inject
     AccountService accountService
 
-    @Get('/{accountId}')
-    HttpResponse<Account> getAccount(String accountId) {
+    @Get('/{accountName}')
+    HttpResponse<Account> getAccount(String accountName) {
         try {
-            def account = accountService.getAccount(accountId)
+            def account = accountService.getAccount(accountName)
             return HttpResponse.ok(account)
         } catch (e) {
-            String errMsg = "error trying to get account for accountId: ${accountId} -> ${e.message ?: e}"
+            String errMsg = "error trying to get account for accountName: ${accountName} -> ${e.message ?: e}"
             log.error(errMsg, e)
             return HttpResponse.serverError()
         }
@@ -66,13 +66,13 @@ class AccountController {
         }
     }
 
-    @Delete('/{accountId}')
-    HttpResponse delete(String accountId) {
+    @Delete('/{accountName}')
+    HttpResponse delete(String accountName) {
         try {
-            accountService.delete(accountId)
-            return HttpResponse.ok(accountId)
+            accountService.delete(accountName)
+            return HttpResponse.ok()
         } catch (e) {
-            String errMsg = "error trying to delete account ${accountId} -> ${e.message ?: e}"
+            String errMsg = "error trying to delete account ${accountName} -> ${e.message ?: e}"
             log.error(errMsg, e)
             return HttpResponse.serverError()
         }

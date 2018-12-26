@@ -84,20 +84,20 @@ class AccountServiceSpec extends BaseAccountSpecification {
 
     def 'delete account'() {
         when:
-        accountService.delete(account1.version)
+        accountService.delete(account1.name)
 
         then:
-        1 * accountConsumer.findAccount(account1.version) >> account1
+        1 * accountConsumer.findAccount(account1.name) >> account1
         1 * accountProducer.delete(account1)
         0 * _
     }
 
     def 'delete account handles exception being thrown'() {
         when:
-        accountService.delete(account1.version)
+        accountService.delete(account1.name)
 
         then:
-        1 * accountConsumer.findAccount(account1.version) >> account1
+        1 * accountConsumer.findAccount(account1.name) >> account1
         1 * accountProducer.delete(account1) >> {
             throw new Exception("delete account blew up")
         }

@@ -7,7 +7,14 @@ import com.os.accounts.domain.Account
 
 class AccountGenerator {
 
-    static void generate() {
+    static void main(String[] args) {
+        println("AccountGenerator generating new domain objects...........")
+        generateAccountAPI()
+    }
+
+
+    static void generateAccountAPI() {
+        println("generating account domain objects...........")
         HollowWriteStateEngine writeEngine = new HollowWriteStateEngine()
         HollowObjectMapper mapper = new HollowObjectMapper(writeEngine)
         mapper.initializeTypeState(Account)
@@ -19,7 +26,6 @@ class AccountGenerator {
                 .withDataModel(writeEngine)
                 .build()
         generator.generateSourceFiles()
-
     }
 
 }

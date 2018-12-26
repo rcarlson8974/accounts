@@ -17,8 +17,8 @@ class AccountService {
     @Inject
     AccountConsumer accountConsumer
 
-    Account getAccount(String accountId) {
-        return accountConsumer.findAccount(accountId)
+    Account getAccount(String accountName) {
+        return accountConsumer.findAccount(accountName)
     }
 
     List<Account> list() {
@@ -33,8 +33,9 @@ class AccountService {
         accountProducer.saveAccounts(accounts)
     }
 
-    void delete(String accountId) {
-        def account = accountConsumer.findAccount(accountId)
+    void delete(String accountName) {
+        def account = getAccount(accountName)
+//        accountProducer.delete(accountName)
         accountProducer.delete(account)
     }
 

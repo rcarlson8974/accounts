@@ -9,7 +9,7 @@ import spock.lang.Ignore
 class AccountProducerSpec extends BaseAccountSpecification {
 
     HollowIncrementalProducer incrementalProducer = Mock()
-    AccountProducer accountProducer = new AccountProducer(hollowLocationPath: '/tmp/hollow/test/account', hollowLocationVersion: 'v1', numStatesBetweenSnapshots: 1, incrementalProducer: incrementalProducer)
+    AccountProducer accountProducer = new AccountProducer(hollowAccountPath: '/tmp/hollow/test/account', hollowAccountVersion: 'v1', numStatesBetweenSnapshots: 1, incrementalProducer: incrementalProducer)
 
     void setup() {
         GroovyMock(HollowProducer, global: true)

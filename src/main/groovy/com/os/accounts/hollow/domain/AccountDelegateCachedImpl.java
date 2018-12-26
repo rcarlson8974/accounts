@@ -9,7 +9,6 @@ import com.netflix.hollow.api.objects.delegate.HollowCachedDelegate;
 @SuppressWarnings("all")
 public class AccountDelegateCachedImpl extends HollowObjectAbstractDelegate implements HollowCachedDelegate, AccountDelegate {
 
-    private final int versionOrdinal;
     private final int nameOrdinal;
     private final int descriptionOrdinal;
     private final int userIdOrdinal;
@@ -21,7 +20,6 @@ public class AccountDelegateCachedImpl extends HollowObjectAbstractDelegate impl
     private AccountTypeAPI typeAPI;
 
     public AccountDelegateCachedImpl(AccountTypeAPI typeAPI, int ordinal) {
-        this.versionOrdinal = typeAPI.getVersionOrdinal(ordinal);
         this.nameOrdinal = typeAPI.getNameOrdinal(ordinal);
         this.descriptionOrdinal = typeAPI.getDescriptionOrdinal(ordinal);
         this.userIdOrdinal = typeAPI.getUserIdOrdinal(ordinal);
@@ -31,10 +29,6 @@ public class AccountDelegateCachedImpl extends HollowObjectAbstractDelegate impl
         this.categoryOrdinal = typeAPI.getCategoryOrdinal(ordinal);
         this.notesOrdinal = typeAPI.getNotesOrdinal(ordinal);
         this.typeAPI = typeAPI;
-    }
-
-    public int getVersionOrdinal(int ordinal) {
-        return versionOrdinal;
     }
 
     public int getNameOrdinal(int ordinal) {

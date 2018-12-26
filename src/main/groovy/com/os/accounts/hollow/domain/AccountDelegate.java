@@ -6,8 +6,6 @@ import com.netflix.hollow.api.objects.delegate.HollowObjectDelegate;
 @SuppressWarnings("all")
 public interface AccountDelegate extends HollowObjectDelegate {
 
-    public int getVersionOrdinal(int ordinal);
-
     public int getNameOrdinal(int ordinal);
 
     public int getDescriptionOrdinal(int ordinal);
