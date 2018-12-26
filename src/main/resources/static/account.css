@@ -21,3 +21,8 @@ thead {
     margin: 20px;
     text-align: center;
 }
+
+.fixed-table-toolbar .btn {
+    background-color: transparent;
+    color: black;
+}
